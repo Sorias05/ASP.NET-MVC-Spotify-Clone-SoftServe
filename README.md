@@ -1,7 +1,7 @@
-Spotify
+**Spotify**
 https://open.spotify.com
 
-Goals
+**Goals**
 1. Add user registration and login
 2. Add functional MP3 Player
 3. Add list of somgs
