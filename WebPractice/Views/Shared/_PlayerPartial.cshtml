@@ -1,0 +1,11 @@
+﻿@using WebPractice.Services
+@inject IPlayerService PlayerService
+
+<div>
+
+        @Context.Session.Get("playerItems")
+        <audio controls>
+            <source src="~/MP3Files/@PlayerService.currentSong.FilePath" />
+        </audio>
+
+</div>

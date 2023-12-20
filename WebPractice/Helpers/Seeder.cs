@@ -22,12 +22,14 @@ namespace WebPractice.Helpers
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
+            string nickname = "Admin";
             string email = "admin@admin.com";
             string password = "Admin_123";
 
             if (await userManager.FindByEmailAsync(email) == null)
             {
                 var user = new User();
+                user.Nickname = nickname;
                 user.UserName = email;
                 user.Email = email;
 

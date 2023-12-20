@@ -7,6 +7,7 @@
         public string Description { get; set; }
         public string? ImageUrl { get; set; }
         public string? UserId { get; set; }
-        public ICollection<Song> Songs { get; set; }
+        public User? User { get; set; }
+        public ICollection<Song>? Songs { get; set; }
     }
 }

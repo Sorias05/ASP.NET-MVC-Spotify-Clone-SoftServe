@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using WebPractice.Data;
 using WebPractice.Data.Entities;
 using WebPractice.Helpers;
+using WebPractice.Services;
+using WebPractice.Controllers;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,36 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IPlayerService, PlayerService>();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromDays(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+//builder.Services.Configure<CookiePolicyOptions>(options =>
+//{
+//    options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+//    options.OnAppendCookie = cookieContext =>
+//        CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+//    options.OnDeleteCookie = cookieContext =>
+//        CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+//});
+
+//void CheckSameSite(HttpContext httpContext, CookieOptions options)
+//{
+//    if (options.SameSite == SameSiteMode.None)
+//    {
+//        var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
+//        if (MyUserAgentDetectionLib.DisallowsSameSiteNone(userAgent))
+//        {
+//            options.SameSite = SameSiteMode.Unspecified;
+//        }
+//    }
+//}
 
 var app = builder.Build();
 
@@ -37,6 +70,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+//app.UseCookiePolicy();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

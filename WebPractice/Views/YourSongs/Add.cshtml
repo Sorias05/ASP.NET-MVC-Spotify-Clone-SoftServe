@@ -1,0 +1,32 @@
+﻿@model WebPractice.Data.DTO.SongDTO
+
+<h1>Add Song</h1>
+
+<form asp-action="Add" method="post" class="row g-3" enctype="multipart/form-data">
+    <div class="col-md-12">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" type="text" class="form-control" placeholder="Enter song name">
+        <span asp-validation-for="Name" class="form-text text-danger"></span>
+    </div>
+    <div class="col-md-12">
+        <label asp-for="GenreId" class="form-label">Genre</label>
+        <select asp-for="GenreId" asp-items="@ViewBag.GenreList" class="form-select">
+            <option disabled selected>Choose...</option>
+        </select>
+        <span asp-validation-for="GenreId" class="form-text text-danger"></span>
+    </div>
+    <div class="col-md-12">
+        <label asp-for="File" class="form-label">MP3 File</label>
+        <input asp-for="File" type="file" class="form-control">
+        <span asp-validation-for="File" class="form-text text-danger"></span>
+    </div>
+    <div class="col-md-12">
+        <input asp-for="AlbumId" type="hidden" class="form-control">
+    </div>
+    <div class="col-6">
+        <a asp-action="Index" asp-route-id="@Model.AlbumId" class="btn btn-dark w-100">Back</a>
+    </div>
+    <div class="col-6">
+        <button type="submit" class="btn btn-success w-100">Add</button>
+    </div>
+</form>

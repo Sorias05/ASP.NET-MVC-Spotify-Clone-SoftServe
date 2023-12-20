@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Studying\\RSHU\\SoftServe_Practice\\WebPractice\\WebPractice\\WebPractice.csproj": {}
+    "D:\\Studying\\SoftServe_Practice\\WebPractice\\WebPractice\\WebPractice.csproj": {}
   },
   "projects": {
-    "D:\\Studying\\RSHU\\SoftServe_Practice\\WebPractice\\WebPractice\\WebPractice.csproj": {
+    "D:\\Studying\\SoftServe_Practice\\WebPractice\\WebPractice\\WebPractice.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Studying\\RSHU\\SoftServe_Practice\\WebPractice\\WebPractice\\WebPractice.csproj",
+        "projectUniqueName": "D:\\Studying\\SoftServe_Practice\\WebPractice\\WebPractice\\WebPractice.csproj",
         "projectName": "WebPractice",
-        "projectPath": "D:\\Studying\\RSHU\\SoftServe_Practice\\WebPractice\\WebPractice\\WebPractice.csproj",
+        "projectPath": "D:\\Studying\\SoftServe_Practice\\WebPractice\\WebPractice\\WebPractice.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\Studying\\RSHU\\SoftServe_Practice\\WebPractice\\WebPractice\\obj\\",
+        "outputPath": "D:\\Studying\\SoftServe_Practice\\WebPractice\\WebPractice\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -59,6 +59,10 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
               "version": "[7.0.0, )"
+            },
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.2.1, )"
             }
           },
           "imports": [

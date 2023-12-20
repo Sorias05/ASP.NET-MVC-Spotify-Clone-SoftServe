@@ -1,5 +1,69 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model WebPractice.Models.SongViewModel
+@using Microsoft.AspNetCore.Identity
+@using WebPractice.Data.Entities
+@using System.Security.Claims;
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<a asp-controller="YourAlbums" asp-action="Index" class="btn btn-dark">Back</a>
+<a asp-action="Add" asp-route-albumId="@Model.AlbumId" class="btn btn-primary">Add Song</a>
+
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Author</th>
+            <th scope="col">Album</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var p in Model.Songs)
+            {
+                @if (Model.AlbumId == p.AlbumId)
+                {
+                    <tr class="align-middle">
+                        <th scope="row">@p.Id</th>
+                    <td>@p.Name</td>
+                    <td>@(p.Album?.User?.Nickname ?? "not loaded")</td>
+                    <td>@(p.Album?.Name ?? "not loaded")</td>
+                    <td>@(p.Genre?.Name ?? "not loaded")</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-success">
+                                <i class="bi-play-circle"></i>
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        function SortIndexChanged() {
+            const prop = sortSelect.value;
+
+            $.ajax({
+                url: '/songs/sort',
+                data: { property: prop }
+            });
+        }
+    </script>
 }

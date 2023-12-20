@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@model List<WebPractice.Models.SongPlayerViewModel>
+@using Microsoft.AspNetCore.Identity
 @using WebPractice.Data.Entities
 
 @inject SignInManager<User> SignInManager
@@ -8,12 +9,51 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Author</th>
+            <th scope="col">Album</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var s in Model)
+            {
+                <tr class="align-middle">
+                    <td><img width="50" height="50" src="@s.Song.Album?.ImageUrl" /></td>
+                    <td>@s.Song.Name</td>
+                    <td>@(s.Song.Album?.User?.Nickname ?? "not loaded")</td>
+                    <td>@(s.Song.Album?.Name ?? "not loaded")</td>
+                    <td>@(s.Song.Genre?.Name ?? "not loaded")</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Player" asp-route-id="@s.Song.Id" class="btn btn-success">
+                                <i class="bi-play-circle"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
 
-@if (User.IsInRole("Admin"))
-{
-    <h1>Hi Admin</h1>
+@section Scripts
+    {
+    <script type="text/javascript">
+        function SortIndexChanged() {
+            const prop = sortSelect.value;
+
+            $.ajax({
+                url: '/songs/sort',
+                data: { property: prop }
+            });
+        }
+    </script>
 }
