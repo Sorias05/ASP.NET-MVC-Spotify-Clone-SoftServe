@@ -9,6 +9,8 @@ using WebPractice.Models;
 using System.IO;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using WebPractice.Data.DTO;
+using WebPractice.Services;
+using NAudio.Wave;
 
 namespace WebPractice.Controllers
 {
@@ -16,12 +18,14 @@ namespace WebPractice.Controllers
     {
         private readonly ApplicationDbContext context;
         private IHostingEnvironment Environment;
+        private readonly IPlayerService playerService;
         private SongViewModel songViewModel = new SongViewModel();
 
-        public YourSongsController(ApplicationDbContext context, IHostingEnvironment hostingEnvironment)
+        public YourSongsController(ApplicationDbContext context, IHostingEnvironment hostingEnvironment, IPlayerService playerService)
         {
             this.context = context;
             this.Environment = hostingEnvironment;
+            this.playerService = playerService;
         }
 
         private void LoadLists()
@@ -37,6 +41,7 @@ namespace WebPractice.Controllers
             List<Song> songs = context.Songs.Include(x => x.Genre).ToList();
             songViewModel.Songs = songs;
             songViewModel.AlbumId = id;
+            songViewModel.ImageUrl = context.Albums.Find(id).ImageUrl;
             LoadLists();
             
             return View(songViewModel);
@@ -63,9 +68,10 @@ namespace WebPractice.Controllers
                 return View("Add");
             }
 
-            Song song = new Song() { 
+            Song song = new Song() {
                 Name = songDto.Name,
                 FilePath = songDto.FilePath,
+                Duration = GetAudioDuration(songDto.FilePath),
                 AlbumId = songDto.AlbumId,
                 GenreId = songDto.GenreId
             };
@@ -101,7 +107,8 @@ namespace WebPractice.Controllers
         [HttpPost]
         public IActionResult Edit(Song song)
         {
-            if (song.File != null) song.FilePath = UploadFile(song.File);
+            if (song.File != null) DeleteFile(song.FilePath); song.FilePath = UploadFile(song.File);
+            song.Duration = GetAudioDuration(song.FilePath);
 
             if (!ModelState.IsValid || song.FilePath == null)
             {
@@ -123,6 +130,7 @@ namespace WebPractice.Controllers
                 return NotFound();
 
             int aId = item.AlbumId;
+            DeleteFile(item.FilePath);
             context.Songs.Remove(item);
             context.SaveChanges();
 
@@ -146,6 +154,30 @@ namespace WebPractice.Controllers
             //Console.WriteLine(songViewModel.filePath);
             //ViewBag.Data = "data:audio/wav;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)));
             return fileName;
+        }
+
+        private TimeSpan GetAudioDuration(string filePath)
+        {
+            Mp3FileReader reader = new Mp3FileReader(Path.Combine("wwwroot/MP3Files/", filePath));
+            return reader.TotalTime;
+        }
+
+        private void DeleteFile(string filePath)
+        {
+            System.IO.File.Delete(Path.Combine("wwwroot/MP3Files/", filePath));
+        }
+
+        public IActionResult Player(int id)
+        {
+            playerService.AddSong(id);
+            playerService.SetCurrentSong();
+            return RedirectToAction("Index", new { id = playerService.GetSong(id).AlbumId });
+        }
+
+        public IActionResult AddToOrder(int id)
+        {
+            playerService.AddSong(id);
+            return RedirectToAction("Index", new { id = playerService.GetSong(id).AlbumId });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

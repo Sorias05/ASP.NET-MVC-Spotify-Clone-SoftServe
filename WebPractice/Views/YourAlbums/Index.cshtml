@@ -21,24 +21,24 @@
     <tbody>
         @if (Model != null)
         {
-            @foreach (var p in Model)
+            @foreach (var a in Model)
             {
-                @if (User.FindFirst(ClaimTypes.NameIdentifier).Value == p.UserId)
+                @if (User.FindFirst(ClaimTypes.NameIdentifier).Value == a.UserId)
                 {
                     <tr class="align-middle">
-                        <th scope="row">@p.Id</th>
-                        <td><img width="50" height="50" src="@p.ImageUrl" /></td>
-                        <td>@p.Name</td>
-                        <td>@(p.User?.Nickname ?? "not loaded")</td>
+                        <th scope="row">@a.Id</th>
+                        <td><img width="50" height="50" src="@a.ImageUrl" /></td>
+                        <td>@a.Name</td>
+                        <td>@(a.User?.Nickname ?? "not loaded")</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a asp-controller="YourSongs" asp-action="Index" asp-route-id="@p.Id" class="btn btn-secondary">
+                                <a asp-controller="YourSongs" asp-action="Index" asp-route-id="@a.Id" class="btn btn-secondary">
                                     <i class="bi bi-eye"></i>
                                 </a>
-                                <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-warning">
+                                <a asp-action="Edit" asp-route-id="@a.Id" class="btn btn-warning">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-danger">
+                                <a asp-action="Delete" asp-route-id="@a.Id" class="btn btn-danger">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </div>

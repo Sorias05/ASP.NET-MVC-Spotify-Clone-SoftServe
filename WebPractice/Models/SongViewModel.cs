@@ -6,5 +6,6 @@ namespace WebPractice.Models
     {
         public List<Song> Songs { get; set; }
         public int AlbumId { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

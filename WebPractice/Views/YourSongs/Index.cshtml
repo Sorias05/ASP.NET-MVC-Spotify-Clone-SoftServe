@@ -6,9 +6,9 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
+<img width="210" height="210" src="@(Model.ImageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png")" />
 <a asp-controller="YourAlbums" asp-action="Index" class="btn btn-dark">Back</a>
 <a asp-action="Add" asp-route-albumId="@Model.AlbumId" class="btn btn-primary">Add Song</a>
-
 
 <table class="table">
     <thead class="table-dark">
@@ -18,31 +18,36 @@
             <th scope="col">Author</th>
             <th scope="col">Album</th>
             <th scope="col">Genre</th>
+            <th scope="col">Duration</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
         @if (Model != null)
         {
-            @foreach (var p in Model.Songs)
+            @foreach (var s in Model.Songs)
             {
-                @if (Model.AlbumId == p.AlbumId)
+                @if (Model.AlbumId == s.AlbumId)
                 {
                     <tr class="align-middle">
-                        <th scope="row">@p.Id</th>
-                    <td>@p.Name</td>
-                    <td>@(p.Album?.User?.Nickname ?? "not loaded")</td>
-                    <td>@(p.Album?.Name ?? "not loaded")</td>
-                    <td>@(p.Genre?.Name ?? "not loaded")</td>
+                        <th scope="row">@s.Id</th>
+                    <td>@s.Name</td>
+                    <td>@(s.Album?.User?.Nickname ?? "not loaded")</td>
+                    <td>@(s.Album?.Name ?? "not loaded")</td>
+                    <td>@(s.Genre?.Name ?? "not loaded")</td>
+                        <td>@(s.Duration?.ToString("m':'ss") ?? "not loaded")</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-success">
+                            <a asp-action="Player" asp-route-id="@s.Id" class="btn btn-success">
                                 <i class="bi-play-circle"></i>
                             </a>
-                            <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-warning">
+                            <a asp-action="AddToOrder" asp-route-id="@s.Id" class="btn btn-secondary">
+                                <i class="bi-plus-circle"></i>
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-warning">
                                 <i class="bi bi-pencil"></i>
                             </a>
-                            <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-danger">
+                            <a asp-action="Delete" asp-route-id="@s.Id" class="btn btn-danger">
                                 <i class="bi bi-trash"></i>
                             </a>
                         </div>

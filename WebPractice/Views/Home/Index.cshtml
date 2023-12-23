@@ -17,6 +17,7 @@
             <th scope="col">Author</th>
             <th scope="col">Album</th>
             <th scope="col">Genre</th>
+            <th scope="col">Duration</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -31,10 +32,14 @@
                     <td>@(s.Song.Album?.User?.Nickname ?? "not loaded")</td>
                     <td>@(s.Song.Album?.Name ?? "not loaded")</td>
                     <td>@(s.Song.Genre?.Name ?? "not loaded")</td>
+                    <td>@(s.Song.Duration?.ToString("m':'ss") ?? "not loaded")</td>
                     <td>
                         <div class="btn-group" role="group">
                             <a asp-action="Player" asp-route-id="@s.Song.Id" class="btn btn-success">
                                 <i class="bi-play-circle"></i>
+                            </a>
+                            <a asp-action="AddToOrder" asp-route-id="@s.Song.Id" class="btn btn-secondary">
+                                <i class="bi-plus-circle"></i>
                             </a>
                         </div>
                     </td>

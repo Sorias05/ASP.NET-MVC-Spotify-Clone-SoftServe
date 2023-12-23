@@ -162,3 +162,4 @@ D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\NAudio.C
 D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\NAudio.Midi.dll
 D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\NAudio.Wasapi.dll
 D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\NAudio.WinMM.dll
+D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\AngleSharp.dll

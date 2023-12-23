@@ -10,6 +10,7 @@ namespace WebPractice.Data.Entities
         [MinLength(1)]
         public string Name { get; set; }
         public string? FilePath { get; set; }
+        public TimeSpan? Duration { get; set; }
         [NotMapped]
         public IFormFile? File { get; set; }
         //public string? UserId { get; set; }

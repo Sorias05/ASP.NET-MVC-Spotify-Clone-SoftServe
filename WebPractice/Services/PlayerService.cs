@@ -10,9 +10,8 @@ namespace WebPractice.Services
     {
         List<Song?> GetAll();
         Song currentSong { get; }
-        WasapiOut wasapi { get; }
-        void SetWasapi(WasapiOut wasapi);
-        void SetCurrentSong(int id);
+        void SetCurrentSong();
+        int GetCounter();
         void AddSong(int id);
         Song GetSong(int id);
     }
@@ -20,10 +19,10 @@ namespace WebPractice.Services
     public class PlayerService : IPlayerService
     {
         const string playerKey = "playerItems";
+        const string playerCounter = "counter";
         private readonly HttpContext httpContext;
         private readonly ApplicationDbContext context;
         public Song currentSong { get; set; }
-        public WasapiOut wasapi { get; set; }
 
         public PlayerService(IHttpContextAccessor httpContextAccessor, ApplicationDbContext context)
         {
@@ -46,14 +45,25 @@ namespace WebPractice.Services
             ids.Add(id);
             httpContext.Session.Set(playerKey, ids);
         }
-        public void SetWasapi(WasapiOut wasapi)
+        public void SetCurrentSong()
         {
-            this.wasapi = wasapi;
+            //currentSong = context.Songs.Find(id);
+            var ids = httpContext.Session.Get<List<int>>(playerKey);
+            ids ??= new List<int>();
+            var counter = httpContext.Session.Get<int>(playerCounter);
+            if (counter == null)
+                counter = 0;
+
+            counter = ids.Count;
+            httpContext.Session.Set(playerCounter, counter);
         }
-        public void SetCurrentSong(int id)
+        public int GetCounter()
         {
-            currentSong = context.Songs.Find(id);
-            //httpContext.Session.Set(playerKey, ids);
+            var counter = httpContext.Session.Get<int>(playerCounter);
+            if (counter == null)
+                counter = 0;
+
+            return counter;
         }
         public Song GetSong(int id)
         {

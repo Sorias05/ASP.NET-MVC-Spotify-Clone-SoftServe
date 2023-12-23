@@ -11,7 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using NAudio.Wave;
 using System;
 using WebPractice.Helpers;
-
+using System.Reflection.Metadata;
+using AngleSharp.Html.Dom;
+using Microsoft.AspNetCore.Http;
 
 namespace WebPractice.Controllers
 {
@@ -106,7 +108,51 @@ namespace WebPractice.Controllers
         public IActionResult Player(int id)
         {
             playerService.AddSong(id);
-            playerService.SetCurrentSong(id);
+            playerService.SetCurrentSong();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult AddToOrder(int id)
+        {
+            playerService.AddSong(id);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Prev(int id)
+        {
+            var order = HttpContext.Session.Get<List<int>>("playerItems");
+            var counter = HttpContext.Session.Get<int>("counter");
+            if (order != null && counter != null)
+            {
+                if (counter <= 1)
+                {
+                    counter = order.Count;
+                }
+                else
+                {
+                    counter--;
+                }
+            }
+            HttpContext.Session.Set("counter", counter);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Next(int id)
+        {
+            var order = HttpContext.Session.Get<List<int>>("playerItems");
+            var counter = HttpContext.Session.Get<int>("counter");
+            if(order != null && counter != null) 
+            {
+                if (counter >= order.Count)
+                {
+                    counter = 1;
+                }
+                else
+                {
+                    counter++;
+                }
+            }
+            HttpContext.Session.Set("counter", counter);
             return RedirectToAction("Index");
         }
 

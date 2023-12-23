@@ -257,8 +257,11 @@ namespace WebPractice.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AlbumId")
+                    b.Property<int>("AlbumId")
                         .HasColumnType("int");
+
+                    b.Property<TimeSpan?>("Duration")
+                        .HasColumnType("time");
 
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(max)");
@@ -443,7 +446,9 @@ namespace WebPractice.Migrations
                 {
                     b.HasOne("WebPractice.Data.Entities.Album", "Album")
                         .WithMany("Songs")
-                        .HasForeignKey("AlbumId");
+                        .HasForeignKey("AlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebPractice.Data.Entities.Genre", "Genre")
                         .WithMany("Songs")
