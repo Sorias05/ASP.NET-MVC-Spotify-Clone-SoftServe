@@ -1,23 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebPractice.Models;
 using WebPractice.Data;
 using WebPractice.Data.Entities;
 using WebPractice.Services;
-using WebPractice.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using NAudio.Wave;
-using System;
 using WebPractice.Helpers;
-using System.Reflection.Metadata;
-using AngleSharp.Html.Dom;
-using Microsoft.AspNetCore.Http;
 
 namespace WebPractice.Controllers
 {
-    //[Authorize(Roles = "User")]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext context;
@@ -63,47 +55,6 @@ namespace WebPractice.Controllers
         {
             return View();
         }
-
-        //public IActionResult Play(int id)
-        //{
-        //    playerService.AddSong(id);
-        //    var song = context.Songs.Find(id);
-        //    string path = "./wwwroot/MP3Files/" + song.FilePath;
-        //    using (var mf = new MediaFoundationReader(path))
-        //    using (var wo = new WasapiOut())
-        //    {
-        //        playerService.SetWasapi(wo);
-        //        wo.Volume = 0.5f;
-        //        wo.Init(mf);
-        //        wo.Play();
-        //        while (wo.PlaybackState == PlaybackState.Playing)
-        //        {
-        //            Thread.Sleep(1000);
-        //        }
-        //    }
-        //    return RedirectToAction("Index");
-        //}
-
-        //public IActionResult Continue(WasapiOut wo)
-        //{
-        //    playerService.SetWasapi(wo);
-        //    wo.Play();
-        //    return RedirectToAction("Index");
-        //}
-
-        //public IActionResult Pause(WasapiOut wo)
-        //{
-        //    playerService.SetWasapi(wo);
-        //    wo.Pause();
-        //    return RedirectToAction("Index");
-        //}
-
-        //public IActionResult Stop(WasapiOut wo)
-        //{
-        //    playerService.SetWasapi(wo);
-        //    wo.Stop();
-        //    return RedirectToAction("Index");
-        //}
 
         public IActionResult Player(int id)
         {

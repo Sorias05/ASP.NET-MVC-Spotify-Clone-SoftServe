@@ -163,3 +163,4 @@ D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\NAudio.M
 D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\NAudio.Wasapi.dll
 D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\NAudio.WinMM.dll
 D:\Studying\SoftServe_Practice\WebPractice\WebPractice\bin\Debug\net7.0\AngleSharp.dll
+D:\Studying\SoftServe_Practice\WebPractice\WebPractice\obj\Debug\net7.0\WebPractice.sourcelink.json

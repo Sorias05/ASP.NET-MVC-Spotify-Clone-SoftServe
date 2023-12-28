@@ -1,0 +1,17 @@
+﻿@model WebPractice.Data.Entities.Genre
+
+<h1>Create Genre</h1>
+
+<form asp-action="Create" method="post" class="row g-3">
+    <div class="col-md-12">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" type="text" class="form-control" placeholder="Enter album name">
+        <span asp-validation-for="Name" class="form-text text-danger"></span>
+    </div>
+    <div class="col-6">
+        <a asp-action="Index" class="btn btn-dark w-100">Back</a>
+    </div>
+    <div class="col-6">
+        <button type="submit" class="btn btn-success w-100">Create</button>
+    </div>
+</form>

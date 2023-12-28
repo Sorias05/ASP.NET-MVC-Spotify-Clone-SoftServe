@@ -35,7 +35,7 @@
                     <td>@(s.Song.Duration?.ToString("m':'ss") ?? "not loaded")</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a asp-action="Player" asp-route-id="@s.Song.Id" class="btn btn-success">
+                            <a asp-action="Player" asp-route-id="@s.Song.Id" onclick="player.currentTime = 0; player.play();" class="btn btn-success">
                                 <i class="bi-play-circle"></i>
                             </a>
                             <a asp-action="AddToOrder" asp-route-id="@s.Song.Id" class="btn btn-secondary">
@@ -51,6 +51,7 @@
 
 @section Scripts
     {
+    <script src="~/js/site.js"></script>
     <script type="text/javascript">
         function SortIndexChanged() {
             const prop = sortSelect.value;

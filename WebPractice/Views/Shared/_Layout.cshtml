@@ -3,7 +3,6 @@
 @using WebPractice.Services
 @using WebPractice.Helpers
 @using WebPractice.Data
-@using NAudio.Wave;
 
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager 
@@ -34,13 +33,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                         @if (User.IsInRole("User") || User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="YourAlbums" asp-action="Index">Your Albums</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Index">Genres</a>
                             </li>
                         }
                     </ul>
@@ -56,107 +58,61 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        @{
-            var order = Context.Session.Get<List<int>>("playerItems");
-            var counter = Context.Session.Get<int>("counter");
-            if (counter == null) counter = 0;
-            //List<Song> orderList = new List<Song>();
-            //if (order != null)
-            //{
-            //    foreach (var song in order)
-            //    {
-            //        orderList.Add(PlayerService.GetSong(song));
-            //    }
-            //}
-        }
-        <h2>
+        <div class="d-flex justify-content-between align-items-center">
+            @{
+                var order = Context.Session.Get<List<int>>("playerItems");
+                var counter = Context.Session.Get<int>("counter");
+                if (counter == null) counter = 0;
+                Song song = new Song();
+            }
+            @* <h2>
             @counter
             /
             @(order?.Count ?? 0)
-        </h2>
-        <audio id="player" controls autoplay>
+            </h2> *@
+            <audio id="player" autoplay ontimeupdate="initProgressBar()">
                 @if (order != null && counter != 0)
                 {
-                    if (PlayerService.GetSong(order[counter - 1]) != null)
+                    song = PlayerService.GetSong(order[counter - 1]);
+                    if (song != null)
                     {
-                        <source src="~/MP3Files/@PlayerService.GetSong(order[counter - 1]).FilePath" />
-                    }     
+                        <source src="~/MP3Files/@song.FilePath" />
+                    }
                 }
-        </audio>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-            @*<a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="continue" asp-route-wo="@playerservice.wasapi">play</a>
-            <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="pause" asp-route-wo="@playerservice.wasapi">pause</a>
-            <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="stop" asp-route-wo="@playerservice.wasapi">stop</a>*@
-            <a class="btn btn-secondary text-white" asp-controller="Home" asp-action="Prev" asp-route-id="order[counter - 1]"><i class="bi-arrow-left"></i></a>
-            <a class="btn btn-secondary text-white" onclick="player.play()"><i class="bi-play-circle"></i></a>
-            <a class="btn btn-secondary text-white" onclick="player.pause()"><i class="bi-pause-circle"></i></a>
-            <a class="btn btn-secondary text-white" onclick="player.pause(); player.currentTime = 0"><i class="bi-stop-circle"></i></a>
-            <a class="btn btn-secondary text-white" onclick="player.volume += 0.1"><i class="bi-volume-up"></i></a>
-            <a class="btn btn-secondary text-white" onclick="player.volume -= 0.1"><i class="bi-volume-down"></i></a>
-            <a class="btn btn-secondary text-white" asp-controller="Home" asp-action="Next" asp-route-id="order[counter - 1]"><i class="bi-arrow-right"></i></a>
-            @*<button onclick="document.getElementById('player').prev">&#60;prev</button>
-            <button onclick="document.getElementById('player').next">next&#62;</button>*@
-            @*<div class="audio-track"><div class="time"></div></div>
-            <button class="play">Play</button>
-            <button class="pause">Pause</button>
-            <button class="prev">&#60;prev</button>
-            <button class="next">next&#62;</button>*@
+            </audio>
+            <div class="d-inline-flex justify-content-center">
+                @if (song != null)
+                {
+                    <img width="100" height="100" src="@song.Album?.ImageUrl" />
+                    <div>
+                        <strong>@song.Name</strong>
+                        <h6>@song.Album?.User?.Nickname</h6>
+                    </div>
+                }
+            </div>
+            <div class="d-flex flex-column align-items-center" style="width: 50%;">
+                <div class="d-inline-flex justify-content-center">
+                    <a class="btn btn-secondary text-white" onclick="player.currentTime = 0" asp-controller="Home" asp-action="Prev" asp-route-id="order[counter - 1]"><i class="bi-arrow-left"></i></a>
+                    <a class="btn btn-secondary text-white" onclick="player.play()"><i class="bi-play-circle"></i></a>
+                    <a class="btn btn-secondary text-white" onclick="player.pause()"><i class="bi-pause-circle"></i></a>
+                    <a class="btn btn-secondary text-white" onclick="player.pause(); player.currentTime = 0"><i class="bi-stop-circle"></i></a>
+                    <a class="btn btn-secondary text-white" onclick="player.currentTime = 0" id="btnNext" asp-controller="Home" asp-action="Next" asp-route-id="order[counter - 1]"><i class="bi-arrow-right"></i></a>
+                </div>
+                <div class="d-inline-flex justify-content-center">
+                    <small style="float: left; position: relative; left: 15px;" id="start-time"></small>
+                    <div class="progress" id="seek-obj-container">
+                        <progress class="progress-bar bg-info" role="progressbar" id="seek-obj" value="0" max="1"></progress>
+                    </div>
+                    <small style="float: right; position: relative; right: 20px;" id="end-time"></small>
+                </div>
+            </div>
+            <div>
+                <a class="btn btn-secondary text-white" onclick="player.volume += 0.1"><i class="bi-volume-up"></i></a>
+                <a class="btn btn-secondary text-white" onclick="player.volume -= 0.1"><i class="bi-volume-down"></i></a>
+            </div>
         </div>
     </footer>
-    <script>
-        var player = document.getElementById('player');
-        //var orderArray = JSON.parse(json);
-        //let time = document.querySelector(".time");
-        //let btnPlay = document.querySelector(".play"); 
-        //let btnPause = document.querySelector(".pause"); 
-        //let btnPrev = document.querySelector(".prev"); 
-        //let btnNext = document.querySelector(".next");
-
-        //let treck = 0;
-        //function switchTreck (numTreck) {
-        //    audio.src = '~/MP3Files/' + orderArray[numTreck];
-        //    audio.currentTime = 0;
-        //    audio.play();
-        //}
-
-        //btnPlay.addEventListener("click", function () {
-        //    audio.play(); 
-            
-        //    audioPlay = setInterval(function () {
-        //        let audioTime = Math.round(audio.currentTime);
-        //        let audioLength = Math.round(audio.duration)
-        //        time.style.width = (audioTime * 100) / audioLength + '%';
-        //        if (audioTime == audioLength && treck < orderArray.length - 1) {
-        //            treck++;
-        //            switchTreck(treck); 
-        //        } else if (audioTime == audioLength && treck >= orderArray.length - 1) {
-        //            treck = 0; 
-        //            switchTreck(treck);
-        //        }
-        //    }, 10)
-        //});
-
-        //btnPrev.addEventListener("click", function() {
-        //    if (treck > 0) {
-        //        treck--; 
-        //        switchTreck(treck); 
-        //    } else { 
-        //        treck = orderArray.length - 1; 
-        //        switchTreck(treck); 
-        //    }
-        //});
-
-        //btnNext.addEventListener("click", function() {
-
-        //    if (treck < orderArray.length - 1) {
-        //        treck++; 
-        //        switchTreck(treck); 
-        //    } else { 
-        //        treck = 0; 
-        //        switchTreck(treck); 
-        //    }
-        //});
-    </script>
+    <script src="~/js/site.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

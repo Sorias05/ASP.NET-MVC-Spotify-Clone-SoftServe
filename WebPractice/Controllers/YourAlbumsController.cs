@@ -53,11 +53,6 @@ namespace WebPractice.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Details()
-        {
-            return View();
-        }
-
         [HttpGet]
         public IActionResult Edit(int id)
         {

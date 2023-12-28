@@ -1,0 +1,52 @@
+﻿@model List<WebPractice.Data.Entities.Genre>
+@using Microsoft.AspNetCore.Identity
+@using WebPractice.Data.Entities
+@using System.Security.Claims;
+
+<a asp-action="Create" class="btn btn-primary">Create Genre</a>
+
+<table class="table">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var g in Model)
+            {
+                    <tr class="align-middle">
+                        <th scope="row">@g.Id</th>
+                        <td>@g.Name</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Edit" asp-route-id="@g.Id" class="btn btn-warning">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@g.Id" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        function SortIndexChanged() {
+            const prop = sortSelect.value;
+
+            $.ajax({
+                url: '/genres/sort',
+                data: { property: prop }
+            });
+        }
+    </script>
+}

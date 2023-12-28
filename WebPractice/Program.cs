@@ -29,27 +29,6 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-//builder.Services.Configure<CookiePolicyOptions>(options =>
-//{
-//    options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
-//    options.OnAppendCookie = cookieContext =>
-//        CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-//    options.OnDeleteCookie = cookieContext =>
-//        CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-//});
-
-//void CheckSameSite(HttpContext httpContext, CookieOptions options)
-//{
-//    if (options.SameSite == SameSiteMode.None)
-//    {
-//        var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
-//        if (MyUserAgentDetectionLib.DisallowsSameSiteNone(userAgent))
-//        {
-//            options.SameSite = SameSiteMode.Unspecified;
-//        }
-//    }
-//}
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

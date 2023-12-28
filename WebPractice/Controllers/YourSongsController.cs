@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using System.Security.Claims;
 using WebPractice.Data;
 using WebPractice.Data.Entities;
 using WebPractice.Models;
-using System.IO;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 using WebPractice.Data.DTO;
 using WebPractice.Services;
@@ -107,7 +105,7 @@ namespace WebPractice.Controllers
         [HttpPost]
         public IActionResult Edit(Song song)
         {
-            if (song.File != null) DeleteFile(song.FilePath); song.FilePath = UploadFile(song.File);
+            if (song.File != null) { DeleteFile(song.FilePath); song.FilePath = UploadFile(song.File); }
             song.Duration = GetAudioDuration(song.FilePath);
 
             if (!ModelState.IsValid || song.FilePath == null)
@@ -150,9 +148,6 @@ namespace WebPractice.Controllers
                 postedFile.CopyTo(stream);
             }
 
-            //songViewModel.filePath = Path.Combine(path, fileName);
-            //Console.WriteLine(songViewModel.filePath);
-            //ViewBag.Data = "data:audio/wav;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)));
             return fileName;
         }
 

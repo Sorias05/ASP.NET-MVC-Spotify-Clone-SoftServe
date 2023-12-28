@@ -13,12 +13,8 @@ namespace WebPractice.Data.Entities
         public TimeSpan? Duration { get; set; }
         [NotMapped]
         public IFormFile? File { get; set; }
-        //public string? UserId { get; set; }
-        //public int FileId { get; set; }
         public int AlbumId { get; set; }
         public int GenreId { get; set; }
-        //public User? User { get; set; }
-        //public File? File { get; set; }
         public Album? Album { get; set; }
         public Genre? Genre { get; set; }
 
